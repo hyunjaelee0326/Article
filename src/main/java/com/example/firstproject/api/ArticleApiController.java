@@ -106,4 +106,13 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.OK).body(delete):
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    // 트랜잭션 -> 실패 -> 롤백
+    @PostMapping("/api/transaction-test")
+    public ResponseEntity<List<Article>> transactionTest(@RequestBody List<ArticleForm> dto){
+        List<Article> createdList = articeService.createArticles(dto);
+        return (createdList != null ) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdList):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }

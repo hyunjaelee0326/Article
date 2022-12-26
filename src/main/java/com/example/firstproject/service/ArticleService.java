@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service // Service 선언 ( 서비스 객체를 스프링 부트에 생성)
 @Slf4j
@@ -60,8 +62,25 @@ public class ArticleService {
             return null; // 400
         }
         articleRepository.delete(target);
-        //https://www.youtube.com/watch?v=l5Va-XbwR04&list=PLyebPLlVYXCiYdYaWRKgCqvnCFrLEANXt&index=21
+        
 
         return target;
+    }
+
+    @Transactional // 해당 메소드를 트랜잭션으로 묶는다.
+    public List<Article> createArticles(List<ArticleForm> dtos) {
+        // dto 묶음을 entity 묶음으로 변환
+        List<Article> articleList = dtos.stream().map(dto -> dto.toEntity())
+                .collect(Collectors.toList());
+        // entity 묶음을 DB로 저장
+        articleList.stream()
+                .forEach(article -> articleRepository.save(article));
+        // 강제로 예외 발생
+        articleRepository.findById(-1L).orElseThrow(
+                () -> new IllegalArgumentException("결제 실패")
+        );
+        // 결과값 반환
+
+        return articleList;
     }
 }
