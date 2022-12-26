@@ -1,0 +1,22 @@
+{{>layouts/header}}
+{{#article}}
+<form action="/articles/update" method="post"><!-- form은 patch를 지원하지 않음-->
+    <input name="id" type="hidden" value="{{id}}"/>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">제목</label>
+        <input class="form-control" id="exampleInputEmail1" name="title" value="{{title}}">
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else+{{id}}.</div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">내용</label>
+        <input class="form-control" id="exampleInputPassword1" name="content" value="{{content}}">
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/articles/{{id}}">Back</a>
+</form>
+{{/article}}
+{{>layouts/footer}}
